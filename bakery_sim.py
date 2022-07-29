@@ -29,6 +29,18 @@ baker_store.items = [
     state.baker_4
 ]
 
+# ingredient_store = simpy.FilterStore(env, capacity=6)
+# ingredient_store.items = [
+#     state.sugar_container,
+#     state.butter_container,
+#     state.eggs_container,
+#     state.flour_container,
+#     state.baking_soda_container,
+#     state.milk_container
+# ]
+
+
+
 task : Task = Task()
 
 def manage() -> None:
@@ -43,6 +55,7 @@ def manage() -> None:
             state.print_dessert_case()
             state.print_bakers()
             state.print_equipment()
+            state.print_raw_materials()
             valid_task = False
 
             while not valid_task:
@@ -51,7 +64,7 @@ def manage() -> None:
                 recipe = int(input('input recipe (1.cookies, 2.cupcakes, 3.cake, 0.wait): '))
 
                 if task.validate_task(state, equipment_store, equipment, baker_store, baker, recipe):
-
+                    env.process(task.ingredient_task(state,recipe))
                     # If waiting, get the amount of time until the next state change and wait that long
                     if baker == 0 and equipment == 0 and recipe == 0:
                         yield_time = state.get_min_wait_time()
