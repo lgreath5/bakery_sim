@@ -45,7 +45,11 @@ class State:
 
         self._env = environment
         self._sim_time = sim_time
-        self.sim_running = True # Will set to false when game ends
+        self.sim_halted = True # Will set to false when game ends
+
+    def set_state(self, config : Dict[str, Any]) -> None:
+        # TODO: Overwrite state
+        pass
 
     def print_equipment(self) -> None:
         print('\nBAKERY EQUIPMENT')
