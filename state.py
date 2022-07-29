@@ -29,6 +29,13 @@ class State:
         self.decorating_station_1 = Equipment(EquipmentNames.decorating_station.name, environment)
         self.decorating_station_2 = Equipment(EquipmentNames.decorating_station.name, environment)
 
+        self.sugar_container = simpy.Container(environment, init = 10, capacity=10)
+        self.butter_container = simpy.Container(environment, init = 5, capacity=5)
+        self.eggs_container = simpy.Container(environment, init = 20, capacity=20)
+        self.flour_container = simpy.Container(environment, init = 10, capacity=10)
+        self.baking_soda_container = simpy.Container(environment, init = 5, capacity=5)
+        self.milk_container = simpy.Container(environment, init = 5, capacity=5)
+
         # Holds completed items
         self.dessert_case = {
             RecipeNames.cookies : 0,
@@ -48,6 +55,16 @@ class State:
         self.oven_3.print_equipment()
         self.decorating_station_1.print_equipment()
         self.decorating_station_2.print_equipment()
+
+    def print_raw_materials(self) -> None:
+        print('\nRAW MATERIALS')
+        print("Amount of sugar: ",self.sugar_container.level)
+        print("Amount of butter: ",self.butter_container.level)
+        print("Amount of eggs: ",self.eggs_container.level)
+        print("Amount of flour: ",self.flour_container.level)
+        print("Amount of baking soda: ",self.baking_soda_container.level)
+        print("Amount of milk: ",self.milk_container.level)
+
 
     def print_bakers(self) -> None:
         print('\nBAKERS')

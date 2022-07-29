@@ -1,8 +1,16 @@
+from pickle import FALSE
 import simpy
 from equipment import Equipment, EquipmentNames
 from recipe import Recipe, RecipeNames
 from baker import Baker, BakerNames
 from state import State
+
+DEFAULT_SUGAR = 1
+DEFAULT_BUTTER = 1
+DEFAULT_EGGS = 1
+DEFAULT_FLOUR = 1
+DEFAULT_BAKING_SODA = 1
+DEFAULT_MILK = 1
 
 class Task:
 
@@ -49,6 +57,87 @@ class Task:
         yield env.timeout(task_time)
         baker.set_as_not_busy()
         yield baker_store.put(baker)
+
+    def ingredient_task(self,  state : State, recipe : int) -> bool:
+
+        # Get the recipe and required ingredients
+        if recipe == 1:
+            required_ingredients = {
+            'sugar' : DEFAULT_SUGAR,
+            'butter' : DEFAULT_BUTTER,
+            'eggs' : DEFAULT_EGGS,
+            'flour' : DEFAULT_FLOUR,
+            'baking_soda' : 0 ,
+            'milk' : 0
+        }
+
+        if recipe == 2:
+            required_ingredients = {
+            'sugar' : DEFAULT_SUGAR,
+            'butter' : DEFAULT_BUTTER,
+            'eggs' : 2,
+            'flour' : DEFAULT_FLOUR,
+            'baking_soda' :DEFAULT_BAKING_SODA ,
+            'milk' : DEFAULT_MILK
+        }
+
+        if recipe == 3:
+            required_ingredients = {
+            'sugar' : DEFAULT_SUGAR,
+            'butter' : DEFAULT_BUTTER,
+            'eggs' : 2,
+            'flour' : DEFAULT_FLOUR,
+            'baking_soda' :DEFAULT_BAKING_SODA ,
+            'milk' : 2
+        }
+
+        #Check level
+        sugar = state.sugar_container.level
+        butter = state.butter_container.level
+        eggs = state.eggs_container.level
+        flour = state.flour_container.level
+        baking_soda = state.baking_soda_container.level
+        milk = state.milk_container.level
+
+        #If validate take it 
+        if required_ingredients['sugar'] < sugar:
+            yield state.sugar_container.get(required_ingredients['sugar'])
+        else:
+            print("Need to buy more sugar")
+            return FALSE
+        
+        if required_ingredients['butter'] < butter:
+            yield state.butter_container.get(required_ingredients['butter'])
+        else:
+            print("Need to buy more butter")
+            return FALSE
+
+
+        if required_ingredients['eggs'] < eggs:
+            yield state.eggs_container.get(required_ingredients['eggs'])
+        else:
+            print("Need to buy more eggs")
+            return FALSE
+
+        if required_ingredients['flour'] < flour:
+            yield state.flour_container.get(required_ingredients['flour'])
+        else:
+            print("Need to buy more flour")
+            return FALSE
+
+        if required_ingredients['baking_soda'] < baking_soda & required_ingredients['baking_soda'] != 0:
+            yield state.baking_soda_container.get(required_ingredients['baking_soda'])
+        else:
+            print("Need to buy more baking soda")
+            return FALSE
+
+        if required_ingredients['milk'] < milk & required_ingredients['milk'] != 0:
+            yield state.milk_container.get(required_ingredients['milk'])
+        else:
+            print("Need to buy more milk")
+            return FALSE
+
+        return True
 
     def validate_task(self, state : State, equipment_store : simpy.FilterStore, equipment : int, baker_store : simpy.FilterStore, baker : int, recipe : int) -> bool:
         
