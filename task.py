@@ -59,6 +59,14 @@ class Task:
         yield baker_store.put(baker)
 
     def ingredient_task(self,  state : State, recipe : int) -> bool:
+        required_ingredients = {
+            'sugar' : DEFAULT_SUGAR,
+            'butter' : DEFAULT_BUTTER,
+            'eggs' : DEFAULT_EGGS,
+            'flour' : DEFAULT_FLOUR,
+            'baking_soda' : DEFAULT_BAKING_SODA ,
+            'milk' : DEFAULT_MILK
+        }
 
         # Get the recipe and required ingredients
         if recipe == 1:

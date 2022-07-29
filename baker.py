@@ -50,6 +50,12 @@ class Baker:
         else:
             return False
 
+    def time_remaining(self) -> int:
+        if self.busy_until != None:
+            time_remaining = self.busy_until - self._environment.now
+            return time_remaining if time_remaining >= 0 else 0
+        return 0
+
     def print_baker(self) -> None:
         print(self.name.name, 'is trained on:', 
             EquipmentNames.mixer.name if self.trained_on[EquipmentNames.mixer] else '-',
@@ -61,7 +67,7 @@ class Baker:
         elif self._environment.now > self.shift_to:
             print(' - gone for the day')
         elif self.busy_until != None:
-            print(' - busy for', self.busy_until - self._environment.now, 'mins')
+            print(' - busy for', self.time_remaining(), 'mins')
         else:
             print(' - ready!')
 

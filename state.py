@@ -45,6 +45,7 @@ class State:
 
         self._env = environment
         self._sim_time = sim_time
+        self.sim_running = True # Will set to false when game ends
 
     def print_equipment(self) -> None:
         print('\nBAKERY EQUIPMENT')
@@ -107,6 +108,9 @@ class State:
     def get_state(self) -> Dict[str, Any]:
         return {
 
+            'time' : self._env.now,
+            'sim_time' : self._sim_time,
+
             # EQUIPMENT
             'mixer_1_recipe' : RecipeNames(self.mixer_1.current_recipe.name).value if self.mixer_1.current_recipe != None else 0,
             'mixer_1_time_remaining' : self.mixer_1.remaining_time(),
@@ -126,9 +130,52 @@ class State:
             'decorating_station_2_time_remaining' : self.decorating_station_2.remaining_time(),
 
             # BAKERS
-            
+            'baker_1_can_mix' : self.baker_1.trained_on[EquipmentNames.mixer],
+            'baker_1_can_bake' : self.baker_1.trained_on[EquipmentNames.oven],
+            'baker_1_can_decorate' : self.baker_1.trained_on[EquipmentNames.decorating_station],
+            'baker_1_time_remaining' : self.baker_1.time_remaining(),
+            'baker_1_shift_start' : self.baker_1.shift_from,
+            'baker_1_shift_end' : self.baker_1.shift_to,
+
+            'baker_2_can_mix' : self.baker_2.trained_on[EquipmentNames.mixer],
+            'baker_2_can_bake' : self.baker_2.trained_on[EquipmentNames.oven],
+            'baker_2_can_decorate' : self.baker_2.trained_on[EquipmentNames.decorating_station],
+            'baker_2_time_remaining' : self.baker_2.time_remaining(),
+            'baker_2_shift_start' : self.baker_2.shift_from,
+            'baker_2_shift_end' : self.baker_2.shift_to,
+
+            'baker_3_can_mix' : self.baker_3.trained_on[EquipmentNames.mixer],
+            'baker_3_can_bake' : self.baker_3.trained_on[EquipmentNames.oven],
+            'baker_3_can_decorate' : self.baker_3.trained_on[EquipmentNames.decorating_station],
+            'baker_3_time_remaining' : self.baker_3.time_remaining(),
+            'baker_3_shift_start' : self.baker_3.shift_from,
+            'baker_3_shift_end' : self.baker_3.shift_to,
+
+            'baker_4_can_mix' : self.baker_4.trained_on[EquipmentNames.mixer],
+            'baker_4_can_bake' : self.baker_4.trained_on[EquipmentNames.oven],
+            'baker_4_can_decorate' : self.baker_4.trained_on[EquipmentNames.decorating_station],
+            'baker_4_time_remaining' : self.baker_4.time_remaining(),
+            'baker_4_shift_start' : self.baker_4.shift_from,
+            'baker_4_shift_end' : self.baker_4.shift_to,
 
             # RECIPES
+            'recipe_1_yield' : self.recipes[RecipeNames.cookies].batch_yield,
+            'recipe_1_mix_time' : self.recipes[RecipeNames.cookies].times['mixer'],
+            'recipe_1_bake_time' : self.recipes[RecipeNames.cookies].times['oven'],
+            'recipe_1_decorate_time' : self.recipes[RecipeNames.cookies].times['decorating_station'],
+
+            'recipe_2_yield' : self.recipes[RecipeNames.cupcakes].batch_yield,
+            'recipe_2_mix_time' : self.recipes[RecipeNames.cupcakes].times['mixer'],
+            'recipe_2_bake_time' : self.recipes[RecipeNames.cupcakes].times['oven'],
+            'recipe_2_decorate_time' : self.recipes[RecipeNames.cupcakes].times['decorating_station'],
+
+            'recipe_3_yield' : self.recipes[RecipeNames.cake].batch_yield,
+            'recipe_3_mix_time' : self.recipes[RecipeNames.cake].times['mixer'],
+            'recipe_3_bake_time' : self.recipes[RecipeNames.cake].times['oven'],
+            'recipe_3_decorate_time' : self.recipes[RecipeNames.cake].times['decorating_station'],
 
             # DESSERT CASE
+            'completed_cookies' : self.dessert_case[RecipeNames.cookies],
+            'completed_cupcakes' : self.dessert_case[RecipeNames.cupcakes],
+            'completed_cake' : self.dessert_case[RecipeNames.cake]   
         }
