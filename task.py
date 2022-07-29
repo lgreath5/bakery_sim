@@ -58,7 +58,7 @@ class Task:
         baker.set_as_not_busy()
         yield baker_store.put(baker)
 
-    def ingredient_task(self,  state : State, recipe : int) -> bool:
+    def ingredient_task(self,  state : State, recipe : int, refill : int) -> bool:
 
         # Get the recipe and required ingredients
         if recipe == 1:
@@ -137,6 +137,19 @@ class Task:
             print("Need to buy more milk")
             return FALSE
 
+        if refill != 0:
+            if refill == 1:
+                yield state.sugar_container.put(10)
+            if refill == 2:
+                yield state.butter_container.put(5)
+            if refill == 3:
+                yield state.eggs_container.put(20)
+            if refill == 4:
+                yield state.flour_container.put(10)
+            if refill == 5:
+                yield state.baking_soda_container.put(5)
+            if refill == 6:
+                yield state.milk_container.put(5)
         return True
 
     def validate_task(self, state : State, equipment_store : simpy.FilterStore, equipment : int, baker_store : simpy.FilterStore, baker : int, recipe : int) -> bool:
