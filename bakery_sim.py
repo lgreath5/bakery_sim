@@ -62,9 +62,10 @@ def manage() -> None:
                 baker = int(input('\ninput baker (1.Chip, 2.Coco, 3.Eclair, 4.Reese, 0.wait): '))
                 equipment = int(input('input action (1.mix, 2.bake, 3.decorate, 0.wait): '))
                 recipe = int(input('input recipe (1.cookies, 2.cupcakes, 3.cake, 0.wait): '))
+                refill = int(input('input raw material to refill (1.sugar, 2.butter, 3.eggs, 4.flour, 5.baking soda, 6.milk, 0.wait): '))
 
                 if task.validate_task(state, equipment_store, equipment, baker_store, baker, recipe):
-                    env.process(task.ingredient_task(state,recipe))
+                    env.process(task.ingredient_task(state,recipe, refill))
                     # If waiting, get the amount of time until the next state change and wait that long
                     if baker == 0 and equipment == 0 and recipe == 0:
                         yield_time = state.get_min_wait_time()
